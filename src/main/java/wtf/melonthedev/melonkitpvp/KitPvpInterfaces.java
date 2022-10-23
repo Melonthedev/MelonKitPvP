@@ -138,10 +138,17 @@ public class KitPvpInterfaces {
 
             for (int i = 0; i < 9; i++) {
                 ItemStack item = event.getClickedInventory().getItem(i + 18);
-                if (item == null) continue;
-                Material material = item.getType();
+                item = item == null ? new ItemStack(Material.AIR) : item;
+                //if (item == null) {
+                //    continue;
+                //}
+                Material material = item != null ? item.getType() : Material.AIR;
                 if (kit.getContents().getInventory()[i] != null) item.setAmount(kit.getContents().getInventory()[i].getAmount());
-                if (!hotbarItems.containsKey(material)) continue;
+                if (!hotbarItems.containsKey(material)) {
+                    kit.getContents().getInventory()[i] = null;
+                    kit.getContents().getHotbarItemOrder().setSlot(i, HotbarItemOrder.Type.NONE);
+                    continue;
+                }
                 kit.getContents().getInventory()[i] = item;
                 kit.getContents().getHotbarItemOrder().setSlot(i, hotbarItems.get(material));
             }
