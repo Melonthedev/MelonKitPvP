@@ -60,25 +60,39 @@ public class KitPvpInterfaces {
         player.openInventory(inv);
     }
 
-    public static void openKitSelector(Player player, Player target) {
+    public static void openKitSelector(Player player, Player target, int page) {
         Inventory kitInv = Bukkit.createInventory(null, 27, ChatColor.LIGHT_PURPLE + "KitPVP - Select kit: " + target.getName());
         for (int i = 0; i < kitInv.getSize(); i++)
             kitInv.setItem(i, Utils.createItem(Material.CYAN_STAINED_GLASS_PANE, " ", null, 1));
-        kitInv.setItem(10, Kit.STANDARD.getIcon());
+
+        int kitSlot = 10;
+        for (int i = 0; i < Kit.values().length; i++) {
+        //for (Kit kit : Kit.values()) {
+            Kit kit = Kit.values()[i + i*4];
+            ItemStack stack;
+            if (kit == null)
+                stack = Utils.createItem(Material.CYAN_STAINED_GLASS_PANE, " ", null, 1);
+            else stack = kit.getIcon();
+            kitInv.setItem(kitSlot, stack);
+            kitSlot += 2;//(Kit.values().length <=4 ? 2 : 1);
+            if (kitSlot >= 18) return;
+        }
+        int maxPages = (int)Math.ceil((float) Kit.values().length / 4);
+        /*kitInv.setItem(10, Kit.STANDARD.getIcon());
         kitInv.setItem(11, Kit.PRO.getIcon());
         kitInv.setItem(12, Kit.ULTRA.getIcon());
         kitInv.setItem(13, Kit.EPIC.getIcon());
         kitInv.setItem(14, Kit.SNIPER.getIcon());
         kitInv.setItem(15, Kit.OP.getIcon());
-        kitInv.setItem(16, Kit.ENDERMAN.getIcon());
+        kitInv.setItem(16, Kit.ENDERMAN.getIcon());*/
         kitInv.setItem(22, Utils.createItem(Material.ARROW, ChatColor.RESET + "Go Back", ChatColor.GRAY + "To Home", 1));
-        kitInv.setItem(26, Utils.createItem(Material.ARROW, ChatColor.RESET + "Next Page", ChatColor.GRAY + "(1/1)", 1));
+        kitInv.setItem(26, Utils.createItem(Material.ARROW, ChatColor.RESET + "Next Page", ChatColor.GRAY + "(" + page + "/" + maxPages + ")", 1));
         player.openInventory(kitInv);
         //Main.inInventory.add(player.getUniqueId());
     }
 
     public static void openKitSelector(Player player) {
-        openKitSelector(player, player);
+        openKitSelector(player, player, 1);
     }
 
     public static void openYesNoKitChangeGui(Player player, Kit newKit) {
@@ -288,6 +302,8 @@ public class KitPvpInterfaces {
             case 22:
                 openMainMenu(player);
                 break;
+            case 26:
+
         }
         /*if (shouldBeClicked) {
             Main.getPlugin().saveConfig();
