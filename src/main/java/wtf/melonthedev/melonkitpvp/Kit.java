@@ -18,7 +18,7 @@ public enum Kit {
             .addGoldenCarrots(8)
             .addTools()
             .build()),
-    PRO("Pro", "Kit contents:\n- Iron Sword\n- Full Iron\n- 64x Stone\n- 1x Water Bucket\n- Fishing Rod\n- 16x Golden Carrot", Material.IRON_SWORD, ChatColor.AQUA, new KitContents(new HotbarItemOrder(HotbarItemOrder.Type.SWORD, HotbarItemOrder.Type.BLOCKS, HotbarItemOrder.Type.FOOD).setSlot9(HotbarItemOrder.Type.BUCKET))
+    PRO("Pro", "Kit contents:\n- Iron Sword\n- Full Iron\n- 64x Stone\n- 1x Water Bucket\n- 16x Golden Carrot", Material.IRON_SWORD, ChatColor.AQUA, new KitContents(new HotbarItemOrder(HotbarItemOrder.Type.SWORD, HotbarItemOrder.Type.BLOCKS, HotbarItemOrder.Type.FOOD).setSlot9(HotbarItemOrder.Type.BUCKET))
             .addArmor(KitContents.KitArmor.IRON)
             .addSword(Material.IRON_SWORD)
             .addBlocks(Material.CYAN_CONCRETE, 64)
@@ -75,16 +75,25 @@ public enum Kit {
             .addSword(Material.IRON_SWORD)
             .addBlocks(Material.BLUE_CONCRETE, 64)
             .addGoldenCarrots(16)
-            .addItem(4, Material.ENDER_PEARL, 4)
+            .addItem(3, Material.ENDER_PEARL, 4)
             .addWaterBucket()
             .addRod()
             .addTools()
             .build()),
-    TANK("Tank", "Kit contents:\n- All Standard-Items\n- Full Diamond", Material.DIAMOND_CHESTPLATE, ChatColor.BLUE, new KitContents(new HotbarItemOrder(HotbarItemOrder.Type.SWORD, HotbarItemOrder.Type.BLOCKS, HotbarItemOrder.Type.FOOD))
+    TANK("Tank", "Kit contents:\n- All Standard-Items\n- Full Diamond", Material.DIAMOND_CHESTPLATE, ChatColor.AQUA, new KitContents(new HotbarItemOrder(HotbarItemOrder.Type.SWORD, HotbarItemOrder.Type.BLOCKS, HotbarItemOrder.Type.FOOD))
             .addArmor(KitContents.KitArmor.DIAMOND)
             .addSword(Material.IRON_SWORD)
             .addBlocks(Material.BROWN_CONCRETE, 64)
             .addGoldenCarrots(8)
+            .addTools()
+            .build()),
+    DOORER("Doorer", "Kit contents:\n- All Standard-Items\n- 64x Oak Doors\n- 64x Spruce Doors", Material.OAK_DOOR, ChatColor.DARK_GRAY, new KitContents(new HotbarItemOrder(HotbarItemOrder.Type.SWORD, HotbarItemOrder.Type.BLOCKS, HotbarItemOrder.Type.FOOD))
+            .addArmor(KitContents.KitArmor.LEATHER)
+            .addSword(Material.IRON_SWORD)
+            .addBlocks(Material.BROWN_CONCRETE, 64)
+            .addGoldenCarrots(8)
+            .addItem(3, Material.OAK_DOOR, 64)
+            .addItem(4, Material.SPRUCE_DOOR, 64)
             .addTools()
             .build());
 

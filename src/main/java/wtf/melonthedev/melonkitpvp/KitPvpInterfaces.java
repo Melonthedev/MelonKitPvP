@@ -16,7 +16,7 @@ import java.util.*;
 public class KitPvpInterfaces {
 
     public static void openMainMenu(Player player) {
-        Inventory inv = Bukkit.createInventory(null, 27, ChatColor.LIGHT_PURPLE + "KitPVP - Main Menu");
+        Inventory inv = Bukkit.createInventory(null, 27, ChatColor.BLUE + "KitPVP - Main Menu");
         for (int i = 0; i < inv.getSize(); i++)
             inv.setItem(i, Utils.createItem(Material.CYAN_STAINED_GLASS_PANE, " ", null, 1));
         ItemStack stats = new ItemStack(Material.PLAYER_HEAD);
@@ -45,7 +45,7 @@ public class KitPvpInterfaces {
     }
 
     public static void openSettingsInterface(Player player) {
-        Inventory inv = Bukkit.createInventory(null, 27,  ChatColor.LIGHT_PURPLE + "KitPvP Settings");
+        Inventory inv = Bukkit.createInventory(null, 27,  ChatColor.BLUE + "KitPvP Settings");
         for (int i = 0; i < inv.getSize(); i++)
             inv.setItem(i, Utils.createItem(Material.CYAN_STAINED_GLASS_PANE, " ", null, 1));
         inv.setItem(10, Utils.createItem(Material.IRON_SWORD, ChatColor.WHITE + "PvP System: " + (KitPvP.getSetting("useoldpvp") ? "1.8" : "1.9+"), ChatColor.GRAY + "Click to toggle between 1.8/1.9+", 1));
@@ -61,34 +61,34 @@ public class KitPvpInterfaces {
     }
 
     public static void openKitSelector(Player player, Player target, int page) {
-        Inventory kitInv = Bukkit.createInventory(null, 27, ChatColor.LIGHT_PURPLE + "KitPVP - Select kit: " + target.getName());
+        Inventory kitInv = Bukkit.createInventory(null, 27, ChatColor.BLUE + "KitPVP - Select kit: " + target.getName());
         for (int i = 0; i < kitInv.getSize(); i++)
             kitInv.setItem(i, Utils.createItem(Material.CYAN_STAINED_GLASS_PANE, " ", null, 1));
 
         int kitSlot = 10;
-        for (int i = 0; i < Kit.values().length; i++) {
-        //for (Kit kit : Kit.values()) {
-            Kit kit = Kit.values()[i + i*4];
+        for (int i = 0; i <= 7; i++) {
+            /*System.out.println("i: " + i + " page: " + page);
+            System.out.println((page * 7));
+            System.out.println(i + (page * 7));
+            System.out.println(Kit.values().length);*/
+            int kitIndex = i + ((page-1) * 7);
+            //if (kitIndex >= Kit.values().length) continue;
             ItemStack stack;
-            if (kit == null)
+            if (kitIndex >= Kit.values().length)
                 stack = Utils.createItem(Material.CYAN_STAINED_GLASS_PANE, " ", null, 1);
-            else stack = kit.getIcon();
+            else {
+                Kit kit = Kit.values()[kitIndex];
+                stack = kit.getIcon();
+            }
             kitInv.setItem(kitSlot, stack);
-            kitSlot += 2;//(Kit.values().length <=4 ? 2 : 1);
-            if (kitSlot >= 18) return;
+            kitSlot += 1;//(Kit.values().length <=4 ? 2 : 1);
+            if (kitSlot >= 17) break;
         }
-        int maxPages = (int)Math.ceil((float) Kit.values().length / 4);
-        /*kitInv.setItem(10, Kit.STANDARD.getIcon());
-        kitInv.setItem(11, Kit.PRO.getIcon());
-        kitInv.setItem(12, Kit.ULTRA.getIcon());
-        kitInv.setItem(13, Kit.EPIC.getIcon());
-        kitInv.setItem(14, Kit.SNIPER.getIcon());
-        kitInv.setItem(15, Kit.OP.getIcon());
-        kitInv.setItem(16, Kit.ENDERMAN.getIcon());*/
+        int maxPages = (int)Math.ceil((float) Kit.values().length / 7);
         kitInv.setItem(22, Utils.createItem(Material.ARROW, ChatColor.RESET + "Go Back", ChatColor.GRAY + "To Home", 1));
-        kitInv.setItem(26, Utils.createItem(Material.ARROW, ChatColor.RESET + "Next Page", ChatColor.GRAY + "(" + page + "/" + maxPages + ")", 1));
+        if (page > 1) kitInv.setItem(9, Utils.createItem(Material.ARROW, ChatColor.RESET + "Previous Page", ChatColor.GRAY + "(" + page + "/" + maxPages + ")", 1));
+        if (page != maxPages) kitInv.setItem(17, Utils.createItem(Material.ARROW, ChatColor.RESET + "Next Page", ChatColor.GRAY + "(" + page + "/" + maxPages + ")", 1));
         player.openInventory(kitInv);
-        //Main.inInventory.add(player.getUniqueId());
     }
 
     public static void openKitSelector(Player player) {
@@ -96,22 +96,25 @@ public class KitPvpInterfaces {
     }
 
     public static void openYesNoKitChangeGui(Player player, Kit newKit) {
-        Inventory inv = Bukkit.createInventory(null, 27, "Change Kit to " + newKit.name());
+        Inventory inv = Bukkit.createInventory(null, 27, "Change Kit to " + newKit.getColoredName());
         for (int i = 0; i < inv.getSize(); i++)
             inv.setItem(i, Utils.createItem(Material.CYAN_STAINED_GLASS_PANE, " ", null, 1));
         inv.setItem(11, Utils.createItem(Material.BARRIER, ChatColor.RED + "Cancel", null, 1));
         inv.setItem(15, Utils.createItem(Material.GREEN_CONCRETE, ChatColor.GREEN + "Confirm",ChatColor.RED + "You WILL loose your current killstreak\n and get teleported back to spawn.\n" + ChatColor.GRAY +  ChatColor.GRAY + "New Kit: " + newKit.getColoredName() + ChatColor.GRAY, 1));
+    inv.setItem(22, Utils.createItem(Material.ARROW, ChatColor.RESET + "Go Back", ChatColor.GRAY + "To Kit Selector", 1));
         player.openInventory(inv);
     }
 
     public static void openHotbarEditor(Player player, Kit kit) {
-        Inventory inv = Bukkit.createInventory(null, 36,  ChatColor.LIGHT_PURPLE + "Hotbar Editor: " + kit.getColoredName());
+        Inventory inv = Bukkit.createInventory(null, 36,  ChatColor.BLUE + "Hotbar Editor: " + kit.getColoredName());
         inv.setItem(0, Utils.createItem(Material.GRAY_STAINED_GLASS_PANE, ChatColor.GREEN + "Inventory:", ChatColor.GRAY + "Here you put items that\n shouldn't be in you hotbar.", 1));
         for (int i = 9; i < 18; i++)
             inv.setItem(i, Utils.createItem(Material.CYAN_STAINED_GLASS_PANE, " ", null, 1));
         for (int i = 27; i < 36; i++)
             inv.setItem(i, Utils.createItem(Material.CYAN_STAINED_GLASS_PANE, " ", null, 1));
-        inv.setItem(31, Utils.createItem(Material.LIME_STAINED_GLASS_PANE, ChatColor.RED + "Save Hotbar", null, 1));
+        inv.setItem(30, Utils.createItem(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "Reset Hotbar", null, 1));
+        inv.setItem(31, Utils.createItem(Material.LIME_STAINED_GLASS_PANE, ChatColor.GREEN + "Save Hotbar", null, 1));
+        inv.setItem(32, Utils.createItem(Material.GREEN_STAINED_GLASS_PANE, ChatColor.AQUA + "Save Hotbar & Equip Kit", null, 1));
 
         for (int i = 0; i < 9; i++) {
             ItemStack item = kit.getContents().getInventory()[i];
@@ -153,9 +156,6 @@ public class KitPvpInterfaces {
             for (int i = 0; i < 9; i++) {
                 ItemStack item = event.getClickedInventory().getItem(i + 18);
                 item = item == null ? new ItemStack(Material.AIR) : item;
-                //if (item == null) {
-                //    continue;
-                //}
                 Material material = item != null ? item.getType() : Material.AIR;
                 if (kit.getContents().getInventory()[i] != null) item.setAmount(kit.getContents().getInventory()[i].getAmount());
                 if (!hotbarItems.containsKey(material)) {
@@ -212,6 +212,7 @@ public class KitPvpInterfaces {
             case 23:
                 KitPvP.restockAllKits();
                 player.closeInventory();
+                player.sendMessage(ChatColor.GREEN + "Restocked all kits!");
                 break;
         }
 
@@ -265,67 +266,57 @@ public class KitPvpInterfaces {
     public static void handleSelectKitGuiClick(InventoryClickEvent event, int slot, ItemStack currentItem, Player player, String clearTitle) {
         String playerName = clearTitle.substring(21);
         Player target = Bukkit.getPlayer(playerName);
-        boolean shouldBeClicked = !currentItem.isSimilar(Utils.createItem(Material.CYAN_STAINED_GLASS_PANE, " ", null, 1))
-                && !Objects.equals(currentItem.getItemMeta().getDisplayName(), ChatColor.RESET + "Next Page")
-                && !Objects.equals(currentItem.getItemMeta().getDisplayName(), ChatColor.RESET + "Go Back");
-        if (shouldBeClicked && target == null) {
-            player.sendMessage(ChatColor.RED + "Dieser Spieler ist nicht online.");
-            player.closeInventory();
-            return;
+        switch (slot) {
+            case 22 -> openMainMenu(player);
+            case 9 -> {
+                if (!currentItem.hasItemMeta() || !currentItem.getItemMeta().hasLore()) return;
+                int page = Integer.parseInt(ChatColor.stripColor(currentItem.getItemMeta().getLore().get(0)).substring(1).split("/")[0]);
+                if (page <= 1) return;
+                openKitSelector(player, target, page - 1);
+            }
+            case 17 -> {
+                if (!currentItem.hasItemMeta() || !currentItem.getItemMeta().hasLore()) return;
+                String lore = ChatColor.stripColor(currentItem.getItemMeta().getLore().get(0));
+                int page1 = Integer.parseInt(lore.substring(1).split("/")[0]);
+                int maxPage = Integer.parseInt(lore.substring(1, lore.length() - 1).split("/")[1]);
+                if (page1 >= maxPage) return;
+                openKitSelector(player, target, page1 + 1);
+            }
         }
-        Kit selectedKit = Kit.STANDARD;
+        /*Kit selectedKit = Kit.STANDARD;
         if (Main.selectedKits.containsKey(target.getUniqueId())) Main.selectedKits.put(target.getUniqueId(), Kit.STANDARD);
         else selectedKit = Main.selectedKits.get(target.getUniqueId());
-        assert selectedKit != null;
-        switch (slot) {
-            case 10:
-                handleKitClickAction(target, Kit.STANDARD, player, event.isRightClick());
-                break;
-            case 11:
-                handleKitClickAction(target, Kit.PRO, player, event.isRightClick());
-                break;
-            case 12:
-                handleKitClickAction(target, Kit.ULTRA, player, event.isRightClick());
-                break;
-            case 13:
-                handleKitClickAction(target, Kit.EPIC, player, event.isRightClick());
-                break;
-            case 14:
-                handleKitClickAction(target, Kit.SNIPER, player, event.isRightClick());
-                break;
-            case 15:
-                handleKitClickAction(target, Kit.OP, player, event.isRightClick());
-                break;
-            case 16:
-                handleKitClickAction(target, Kit.ENDERMAN, player, event.isRightClick());
-                break;
-            case 22:
-                openMainMenu(player);
-                break;
-            case 26:
-
+        assert selectedKit != null;*/
+        /*boolean shouldBeClicked = !currentItem.isSimilar(Utils.createItem(Material.CYAN_STAINED_GLASS_PANE, " ", null, 1))
+                && !Objects.equals(currentItem.getItemMeta().getDisplayName(), ChatColor.RESET + "Next Page")
+                && !Objects.equals(currentItem.getItemMeta().getDisplayName(), ChatColor.RESET + "Go Back");
+        */
+        if (slot >= 10 && slot <= 16) {
+            if (target == null) {
+                player.sendMessage(ChatColor.RED + "Dieser Spieler ist nicht online.");
+                player.closeInventory();
+                return;
+            }
+            if (!currentItem.getItemMeta().hasDisplayName()) return;
+            Kit kit = Kit.valueOf(ChatColor.stripColor(currentItem.getItemMeta().getDisplayName()).toUpperCase());
+            handleKitClickAction(target, kit, player, event.isRightClick());
         }
-        /*if (shouldBeClicked) {
-            Main.getPlugin().saveConfig();
-            KitPvP.enableKitPvp(player);
-            KitPvP.giveKit(target);
-            player.closeInventory();
-        }*/
     }
 
     public static void handleYesNoKitChangeGuiClick(InventoryClickEvent event, int slot, Player player, String clearTitle) {
-        if (slot == 11)
-            player.closeInventory();
-        else if (slot == 15) {
-            selectKit(player, Kit.valueOf(clearTitle.substring(14)), null);
-            KitPvP.setKillStreak(player.getName(), 0);
-            player.teleport(player.getWorld().getSpawnLocation());
+        switch (slot) {
+            case 11 -> player.closeInventory();
+            case 22 -> openKitSelector(player);
+            case 15 -> {
+                selectKit(player, Kit.valueOf(clearTitle.toUpperCase().substring(14)), null);
+                KitPvP.setKillStreak(player.getName(), 0);
+                player.teleport(player.getWorld().getSpawnLocation());
+            }
         }
     }
 
     public static void handleKitClickAction(Player player, Kit kit, Player executor, boolean isRightClick) {
-        if (isRightClick)
-            openHotbarEditor(player, kit);
+        if (isRightClick) openHotbarEditor(player, kit);
         else selectKit(player, kit, executor);
     }
 

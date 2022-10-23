@@ -17,66 +17,30 @@ public class HotbarItemOrder {
         for (int i = 0; i < 9; i++) {
             if (i >= slots.length) continue;
             switch (i) {
-                case 0:
-                    slot1 = slots[i];
-                    break;
-                case 1:
-                    slot2 = slots[i];
-                    break;
-                case 2:
-                    slot3 = slots[i];
-                    break;
-                case 3:
-                    slot4 = slots[i];
-                    break;
-                case 4:
-                    slot5 = slots[i];
-                    break;
-                case 5:
-                    slot6 = slots[i];
-                    break;
-                case 6:
-                    slot7 = slots[i];
-                    break;
-                case 7:
-                    slot8 = slots[i];
-                    break;
-                case 8:
-                    slot9 = slots[i];
-                    break;
+                case 0 -> slot1 = slots[i];
+                case 1 -> slot2 = slots[i];
+                case 2 -> slot3 = slots[i];
+                case 3 -> slot4 = slots[i];
+                case 4 -> slot5 = slots[i];
+                case 5 -> slot6 = slots[i];
+                case 6 -> slot7 = slots[i];
+                case 7 -> slot8 = slots[i];
+                case 8 -> slot9 = slots[i];
             }
         }
     }
 
     public HotbarItemOrder setSlot(int i, Type slot) {
         switch (i) {
-            case 0:
-                slot1 = slot;
-                break;
-            case 1:
-                slot2 = slot;
-                break;
-            case 2:
-                slot3 = slot;
-                break;
-            case 3:
-                slot4 = slot;
-                break;
-            case 4:
-                slot5 = slot;
-                break;
-            case 5:
-                slot6 = slot;
-                break;
-            case 6:
-                slot7 = slot;
-                break;
-            case 7:
-                slot8 = slot;
-                break;
-            case 8:
-                slot9 = slot;
-                break;
+            case 0 -> slot1 = slot;
+            case 1 -> slot2 = slot;
+            case 2 -> slot3 = slot;
+            case 3 -> slot4 = slot;
+            case 4 -> slot5 = slot;
+            case 5 -> slot6 = slot;
+            case 6 -> slot7 = slot;
+            case 7 -> slot8 = slot;
+            case 8 -> slot9 = slot;
         }
         return this;
     }

@@ -42,7 +42,7 @@ public class KitPvpCommand implements TabExecutor {
                 KitPvP.disableKitPvp(target);
                 player.sendMessage(ChatColor.AQUA + "Du hast den Spieler " + target.getName() + " von der PVP Liste entfernt.");
             } else if (args[0].equalsIgnoreCase("setKit")) {
-                KitPvpInterfaces.openKitSelector(player, target);
+                KitPvpInterfaces.openKitSelector(player, target, 1);
             } else if (args[0].equalsIgnoreCase("resetKit")) {
                 KitPvP.enableKitPvp(target);
                 KitPvP.giveKit(target);
