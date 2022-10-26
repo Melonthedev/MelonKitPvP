@@ -1,9 +1,7 @@
 package wtf.melonthedev.melonkitpvp;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
+import org.apache.commons.io.FileUtils;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -18,6 +16,8 @@ import org.bukkit.scoreboard.RenderType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.checkerframework.checker.units.qual.K;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 
 public class KitPvP {
@@ -32,6 +32,9 @@ public class KitPvP {
         prepareForPvp(player);
         setupScoreboard(player);
         updateScoreboard();
+        player.setGameMode(GameMode.SURVIVAL);
+        player.teleport(player.getWorld().getSpawnLocation());
+        setKillStreak(player.getName(), 0);
         if (getSetting("useoldpvp")) oldAttackSpeed(player);
         Bukkit.broadcastMessage(ChatColor.GREEN + ">> KitPvP " + ChatColor.GRAY + player.getName());
         Main.hits.put(player.getName(), config.getInt(player.getName() + ".kitpvp.hits"));
@@ -221,4 +224,34 @@ public class KitPvP {
             giveKit(Bukkit.getPlayer(uuid));
         }
     }
+
+    public static void restockFoodAndBlocks(Player player) {
+
+    }
+
+    public static void resetMap() {
+        if (getMultipleChoiceSetting("templatemap").equalsIgnoreCase("none")) {
+            String kitpvpmap = getMultipleChoiceSetting("kitpvpmap");
+            World world = Bukkit.getWorld(kitpvpmap);
+            if (world == null) {
+                Bukkit.getLogger().warning("KitPvp map " + kitpvpmap + " not found! Please set a valid map in the config.yml");
+                return;
+            }
+            world.setKeepSpawnInMemory(false);
+            Bukkit.unloadWorld(world, false);
+            WorldCreator creator = new WorldCreator(kitpvpmap);
+            creator.seed(world.getSeed());
+            for (Player player : world.getPlayers()) player.kickPlayer("Resetting map...");
+            Bukkit.getScheduler().runTaskAsynchronously(Main.getPlugin(), () -> {
+                try {
+                    FileUtils.deleteDirectory(world.getWorldFolder());
+                    Bukkit.createWorld(creator);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+    }
+
+
 }

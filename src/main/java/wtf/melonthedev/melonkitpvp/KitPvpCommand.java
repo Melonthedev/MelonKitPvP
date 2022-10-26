@@ -22,19 +22,24 @@ public class KitPvpCommand implements TabExecutor {
         if (args.length == 0) {
             KitPvpInterfaces.openMainMenu(player);
             return true;
-        } else if (args.length <= 1) {
-            player.sendMessage(ChatColor.RED + "Syntaxerror: /kitpvp");
-            return true;
+        //} else if (args.length <= 1) {
+        //    player.sendMessage(ChatColor.RED + "Syntaxerror: /kitpvp");
+        //    return true;
         } else if (!player.isOp())
             return true;
 
-        Player target = Bukkit.getPlayer(args[1]);
-        if (target == null) {
-            player.sendMessage(ChatColor.RED + "Dieser spieler ist nicht online.");
-            return true;
-        }
         //ADMIN COMMANDS
-        if (args.length == 2) {
+        if (args.length == 1) {
+            if (args[0].equalsIgnoreCase("resetMap")) {
+                KitPvP.resetMap();
+                return true;
+            }
+        } else if (args.length == 2) {
+            Player target = Bukkit.getPlayer(args[1]);
+            if (target == null) {
+                player.sendMessage(ChatColor.RED + "Dieser spieler ist nicht online.");
+                return true;
+            }
             if (args[0].equalsIgnoreCase("addPlayer")) {
                 KitPvP.enableKitPvp(target);
                 player.sendMessage(ChatColor.AQUA + "Du hast den Spieler " + target.getName() + " zu der PVP Liste hinzugefügt.");
@@ -50,6 +55,11 @@ public class KitPvpCommand implements TabExecutor {
                 player.sendMessage(ChatColor.AQUA + "Balance from Player " + target.getName() + ": " + ChatColor.BOLD + KitPvP.getCoins(target));
             }
         } else if (args.length == 3) {
+            Player target = Bukkit.getPlayer(args[1]);
+            if (target == null) {
+                player.sendMessage(ChatColor.RED + "Dieser spieler ist nicht online.");
+                return true;
+            }
             if (args[0].equalsIgnoreCase("setCoins")) {
                 player.sendMessage(ChatColor.AQUA + "New balance from Player " + target.getName() + ": " + ChatColor.BOLD + KitPvP.setCoins(target, Integer.parseInt(args[2])));
             }
@@ -69,6 +79,7 @@ public class KitPvpCommand implements TabExecutor {
             tab.add("setCoins");
             tab.add("getCoins");
             tab.add("resetKit");
+            tab.add("resetMap");
         } else if (args.length == 2)
             Bukkit.getOnlinePlayers().forEach(player -> tab.add(player.getName()));
         return tab;

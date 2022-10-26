@@ -89,6 +89,7 @@ public class KitContents {
     }
 
     public KitContents addShield(EnchantmentOffer... enchantments) {
+        if (!KitPvP.getSetting("enableshields")) return this;
         offhand = addSupportedEnchantments(new ItemStack(Material.SHIELD), enchantments);
         return this;
     }
@@ -104,7 +105,7 @@ public class KitContents {
     }
 
     public KitContents addBow(EnchantmentOffer... enchantments) {
-        inventory[hotbarItemOrder.getSlot(HotbarItemOrder.Type.BOW)] = addSupportedEnchantments(new ItemStack(Material.BOW), enchantments);//TODO
+        inventory[hotbarItemOrder.getSlot(HotbarItemOrder.Type.BOW)] = addSupportedEnchantments(new ItemStack(Material.BOW), enchantments);
         return this;
     }
 
@@ -178,7 +179,7 @@ public class KitContents {
         meta.setDisplayName(ChatColor.GREEN + "Defender Spawn Egg");
         meta.setLore(Arrays.asList(ChatColor.GRAY + "Spawns a " + type.name() + " with " + health + " hp."));
         stack.setItemMeta(meta);
-        inventory[hotbarItemOrder.getSlot(HotbarItemOrder.Type.OTHERS)] = stack;
+        inventory[hotbarItemOrder.getSlot(HotbarItemOrder.Type.DEFENDER)] = stack;
         return this;
     }
 

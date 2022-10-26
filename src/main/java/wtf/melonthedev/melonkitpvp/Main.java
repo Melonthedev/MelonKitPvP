@@ -44,6 +44,17 @@ public final class Main extends JavaPlugin {
                 && !Objects.equals(KitPvP.getMultipleChoiceSetting("neutralplayers"), "disabledamage")
                 && !Objects.equals(KitPvP.getMultipleChoiceSetting("neutralplayers"), "disabledamageandfly")))
             KitPvP.setMultipleChoiceSetting("neutralplayers", "neutralplayers");
+        if (KitPvP.getMultipleChoiceSetting("mapreset") == null
+                || (!Objects.equals(KitPvP.getMultipleChoiceSetting("mapreset"), "5min")
+                && !Objects.equals(KitPvP.getMultipleChoiceSetting("mapreset"), "15min")
+                && !Objects.equals(KitPvP.getMultipleChoiceSetting("mapreset"), "30min")
+                && !Objects.equals(KitPvP.getMultipleChoiceSetting("mapreset"), "60min")
+                && !Objects.equals(KitPvP.getMultipleChoiceSetting("mapreset"), "never")))
+            KitPvP.setMultipleChoiceSetting("mapreset", "neutralplayers");
+        if (KitPvP.getMultipleChoiceSetting("templatemap") == null)
+            KitPvP.setMultipleChoiceSetting("templatemap", "none");
+        if (KitPvP.getMultipleChoiceSetting("kitpvpmap") == null)
+            KitPvP.setMultipleChoiceSetting("kitpvpmap", "world");
         if (!getConfig().contains("settings.enableshields")) KitPvP.setSetting("enableshields", true);
     }
 
