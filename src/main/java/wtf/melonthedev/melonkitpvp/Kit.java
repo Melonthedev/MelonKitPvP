@@ -82,7 +82,7 @@ public enum Kit {
             .build()),
     TANK("Tank", "Kit contents:\n- All Standard-Items\n- Full Diamond", Material.DIAMOND_CHESTPLATE, ChatColor.AQUA, new KitContents(new HotbarItemOrder(HotbarItemOrder.Type.SWORD, HotbarItemOrder.Type.BLOCKS, HotbarItemOrder.Type.FOOD))
             .addArmor(KitContents.KitArmor.DIAMOND)
-            .addSword(Material.IRON_SWORD)
+            .addSword(Material.STONE_SWORD)
             .addBlocks(Material.BROWN_CONCRETE, 64)
             .addGoldenCarrots(8)
             .addTools()
@@ -121,16 +121,16 @@ public enum Kit {
                     .addRod()
                     .addTools()
                     .build()),
-    CRYSTAL("Crystal", "Kit contents:\n- Full Iron\n- 1x Stone Sword\n- 64x Blocks (Glowstone)\n- 16x Golden Carrots\n- 16x Cobwebs\n- 4x End Crystals\n- 16x OBBY\n- 4x Respawn Anchor", Material.END_CRYSTAL, ChatColor.LIGHT_PURPLE, new KitContents(new HotbarItemOrder(HotbarItemOrder.Type.SWORD, HotbarItemOrder.Type.ROD, HotbarItemOrder.Type.BLOCKS, HotbarItemOrder.Type.OTHERS, HotbarItemOrder.Type.OTHERS2, HotbarItemOrder.Type.OTHERS3, HotbarItemOrder.Type.FOOD, HotbarItemOrder.Type.COBWEB).setSlot9(HotbarItemOrder.Type.BUCKET))
+    CRYSTAL("Crystal", "Kit contents:\n- Full Iron\n- 1x Stone Sword\n- 64x Blocks (Glowstone)\n- 16x Golden Carrots\n- 16x Cobwebs\n- 4x End Crystals\n- 16x OBBY\n- 4x Respawn Anchor", Material.END_CRYSTAL, ChatColor.LIGHT_PURPLE, new KitContents(new HotbarItemOrder(HotbarItemOrder.Type.SWORD, HotbarItemOrder.Type.BLOCKS, HotbarItemOrder.Type.OTHERS, HotbarItemOrder.Type.OTHERS2, HotbarItemOrder.Type.OTHERS3, HotbarItemOrder.Type.FOOD, HotbarItemOrder.Type.COBWEB).setSlot9(HotbarItemOrder.Type.BUCKET))
             .addArmor(KitContents.KitArmor.IRON)
             .addSword(Material.STONE_SWORD)
             .addBlocks(Material.GLOWSTONE, 64)
             .addCobwebs(16)
             .addGoldenCarrots(16)
-            .addItem(3, Material.END_CRYSTAL, 4)
-            .addItem(4, Material.OBSIDIAN, 16)
-            .addItem(5, Material.RESPAWN_ANCHOR, 4)
-            .addRod()
+            .addItem(2, Material.END_CRYSTAL, 4)
+            .addItem(3, Material.OBSIDIAN, 16)
+            .addItem(4, Material.RESPAWN_ANCHOR, 4)
+            .addWaterBucket()
             .addTools()
             .build()),
     ;

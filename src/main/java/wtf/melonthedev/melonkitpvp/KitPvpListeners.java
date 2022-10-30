@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
@@ -31,22 +32,14 @@ public class KitPvpListeners implements Listener {
             deadPlayer.getNearbyEntities(50, 10, 50).forEach(entity -> {
                 if (entity.getType() == EntityType.DROPPED_ITEM) entity.remove();
             });
-            if (Main.defenders.containsKey(deadPlayer.getUniqueId())) {
-                for (LivingEntity entity : Main.defenders.get(deadPlayer.getUniqueId()))
+            if (Main.playerDefenders.containsKey(deadPlayer.getUniqueId())) {
+                for (LivingEntity entity : Main.playerDefenders.get(deadPlayer.getUniqueId()))
                     entity.remove();
-                Main.defenders.remove(deadPlayer.getUniqueId());
+                Main.playerDefenders.remove(deadPlayer.getUniqueId());
             }
             KitPvP.setKillStreak(deadPlayer.getName(), 0);
             if (killer == null || !KitPvP.isInPVP(killer)) return;
-            if (deadPlayer == killer) return;
-            switch (KitPvP.getMultipleChoiceSetting("defaultkillbonus")) {
-                case "fullhp" -> killer.setHealth(20);
-                case "gappleeffect" -> {
-                    killer.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 1));
-                    killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 2400, 1));
-                }
-                case "gapple" -> killer.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE));
-            }
+            if (deadPlayer == killer || killer.isDead()) return;
             //Todo: add option to disable refresh
             killer.setFoodLevel(20);
             KitPvP.giveKit(killer); //Todo: add option to disable refresh
@@ -55,6 +48,14 @@ public class KitPvpListeners implements Listener {
             KitPvP.addCoins(killer, 5); //TODO: Add Assist coins
             KitPvP.setKillStreak(killer.getName(), KitPvP.getKillStreak(killer.getName()) + 1);
             KitPvP.updateScoreboard();
+            switch (KitPvP.getMultipleChoiceSetting("defaultkillbonus")) {
+                case "1" -> killer.setHealth(20);
+                case "2" -> killer.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE));
+                case "3" -> {
+                    killer.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 1));
+                    killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 2400, 1));
+                }
+            }
         }, 10);
     }
 
@@ -74,13 +75,14 @@ public class KitPvpListeners implements Listener {
         if (!KitPvP.isInPVP(player)) return;
         if (!(event.getDamager() instanceof Player)) return;
         Player damager = (Player) event.getDamager();
+        if (!Main.hits.containsKey(player.getName())) Main.hits.put(player.getName(), 0);
         Main.hits.put(damager.getName(), Main.hits.get(damager.getName()) + 1);
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         if (!KitPvP.isInPVP(event.getPlayer())) {
-            event.getPlayer().setFlying(KitPvP.getMultipleChoiceSetting("neutralplayers").equals("disabledamageandfly"));
+            event.getPlayer().setAllowFlight(KitPvP.getMultipleChoiceSetting("neutralplayers").equals("3"));
             return;
         }
         Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () -> {
@@ -105,9 +107,7 @@ public class KitPvpListeners implements Listener {
                 || brokenMaterial == Material.SOUL_FIRE
         ) return;
         switch (KitPvP.getMultipleChoiceSetting("breakableblocks")) {
-            case "all" -> {return;}
-            case "none" -> {}
-            case "kitblocks" -> {
+            case "1" -> {
                 for (Kit kit : Kit.values()) {
                     for (ItemStack stack : kit.getContents().getAll()) {
                         if (stack == null) continue;
@@ -116,6 +116,8 @@ public class KitPvpListeners implements Listener {
                     }
                 }
             }
+            case "2" -> {return;}
+            case "3" -> {}
         }
         event.setCancelled(true);
         event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.RED + "You can't break this block in KitPvP!"));
@@ -156,11 +158,16 @@ public class KitPvpListeners implements Listener {
     }
 
     @EventHandler
+    public void onBlockExplode(BlockExplodeEvent event) {
+        if (!KitPvP.getSetting("explodingentities")) event.blockList().clear();
+    }
+
+    @EventHandler
     public void onFishing(PlayerFishEvent event) {
         if (!KitPvP.isInPVP(event.getPlayer())) return;
         if (event.getHook().getState() == FishHook.HookState.HOOKED_ENTITY
                 && event.getHook().getHookedEntity() != null
-                && (event.getHook().getHookedEntity() instanceof Player || event.getHook().getHookedEntity() instanceof ArmorStand || event.getHook().getHookedEntity() instanceof EnderCrystal)) {
+                && (event.getHook().getHookedEntity() instanceof Player || event.getHook().getHookedEntity() instanceof ArmorStand)) {
             event.getHook().remove();
             event.setCancelled(true);
         }
@@ -170,11 +177,6 @@ public class KitPvpListeners implements Listener {
     public void onProjectileHit(ProjectileHitEvent event) {
         if (event.getHitEntity() == null) return;
         if (event.getEntity().getType() != EntityType.FISHING_HOOK) return;
-        if (event.getHitEntity() instanceof EnderCrystal) {
-            //((EnderCrystal) event.getHitEntity()).
-            event.getEntity().remove();
-            return;
-        }
         if (!(event.getHitEntity() instanceof Player)) return;
         Player hooked = (Player) event.getHitEntity();
         if (!KitPvP.isInPVP(hooked)) return;
@@ -207,8 +209,8 @@ public class KitPvpListeners implements Listener {
         defender.setCustomNameVisible(true);
         defender.setCustomName(ChatColor.RED + player.getName() + "'s " + mobName.replaceAll("_", " "));
         player.getInventory().getItem(Objects.requireNonNull(event.getHand())).setAmount(player.getInventory().getItem(event.getHand()).getAmount() - 1);
-        if (!Main.defenders.containsKey(player.getUniqueId())) Main.defenders.put(player.getUniqueId(), new ArrayList<>());
-        Main.defenders.get(player.getUniqueId()).add(defender);
+        if (!Main.playerDefenders.containsKey(player.getUniqueId())) Main.playerDefenders.put(player.getUniqueId(), new ArrayList<>());
+        Main.playerDefenders.get(player.getUniqueId()).add(defender);
     }
 
     @EventHandler
@@ -217,8 +219,8 @@ public class KitPvpListeners implements Listener {
         Player target = (Player) event.getTarget();
         if (!(event.getEntity() instanceof LivingEntity)) return;
         LivingEntity defender = (LivingEntity) event.getEntity();
-        if (!Main.defenders.containsKey(target.getUniqueId())) return;
-        if (Main.defenders.get(target.getUniqueId()).contains(defender))
+        if (!Main.playerDefenders.containsKey(target.getUniqueId())) return;
+        if (Main.playerDefenders.get(target.getUniqueId()).contains(defender))
             event.setCancelled(true);
     }
 

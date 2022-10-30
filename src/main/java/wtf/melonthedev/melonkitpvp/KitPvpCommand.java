@@ -22,17 +22,24 @@ public class KitPvpCommand implements TabExecutor {
         if (args.length == 0) {
             KitPvpInterfaces.openMainMenu(player);
             return true;
-        //} else if (args.length <= 1) {
-        //    player.sendMessage(ChatColor.RED + "Syntaxerror: /kitpvp");
-        //    return true;
         } else if (!player.isOp())
             return true;
 
         //ADMIN COMMANDS
         if (args.length == 1) {
-            if (args[0].equalsIgnoreCase("resetMap")) {
-                KitPvP.resetMap();
-                return true;
+            switch (args[0]) {
+                case "resetMap":
+                    KitPvP.resetMap();
+                    return true;
+                case "settingsMappings":
+                    sender.sendMessage(ChatColor.AQUA + "Settings Mappings:");
+                    sender.sendMessage(ChatColor.AQUA + "Default kill bonus (id: defaultkillbonus): 1 - Full HP, 2 - Gapple, 3 - Gapple Effect");
+                    sender.sendMessage(ChatColor.AQUA + "Restock on kill (id: restockonkill): 1 - Food & Blocks, 2 - Everything, 3 - Off");
+                    sender.sendMessage(ChatColor.AQUA + "Breakable blocks (id: breakableblocks): 1 - Kit Blocks, 2 - All, 3 - None");
+                    sender.sendMessage(ChatColor.AQUA + "Not-In-PvP-Players (id: neutralplayers): 1 - Survival, 2 - No Damage, 3 - No Damage & Fly Mode");
+                    sender.sendMessage(ChatColor.AQUA + "Map Reset (id: neutralplayers): 1 - Alle 5 Minuten, 2 - Alle 15 Minuten, 3 - Alle 30 Minuten, 4 - Jede Stunde, 5 - Nie");
+                    sender.sendMessage(ChatColor.AQUA + "-------------------------------------------");
+                    return true;
             }
         } else if (args.length == 2) {
             Player target = Bukkit.getPlayer(args[1]);

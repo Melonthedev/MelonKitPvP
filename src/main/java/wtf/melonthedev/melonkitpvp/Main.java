@@ -14,8 +14,8 @@ public final class Main extends JavaPlugin {
     public static List<UUID> kitPvpPlayers = new ArrayList<>();
     public static List<UUID> inInventory = new ArrayList<>();
     public static HashMap<UUID, Kit> selectedKits = new HashMap<>();
-    public static HashMap<String, Integer> hits = new HashMap<>(); //TODO
-    public static HashMap<UUID, List<LivingEntity>> defenders = new HashMap<>();
+    public static HashMap<String, Integer> hits = new HashMap<>();
+    public static HashMap<UUID, List<LivingEntity>> playerDefenders = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -23,53 +23,22 @@ public final class Main extends JavaPlugin {
         getLogger().log(Level.INFO, "MelonKitPvP is starting...");
         getCommand("kitpvp").setExecutor(new KitPvpCommand());
         Bukkit.getPluginManager().registerEvents(new KitPvpListeners(), this);
-
-        if (KitPvP.getMultipleChoiceSetting("defaultkillbonus") == null
-                || (!Objects.equals(KitPvP.getMultipleChoiceSetting("defaultkillbonus"), "fullhp")
-                && !Objects.equals(KitPvP.getMultipleChoiceSetting("defaultkillbonus"), "gapple")
-                && !Objects.equals(KitPvP.getMultipleChoiceSetting("defaultkillbonus"), "gappleeffect")))
-            KitPvP.setMultipleChoiceSetting("defaultkillbonus", "gappleeffect");
-        if (KitPvP.getMultipleChoiceSetting("restockonkill") == null
-                || (!Objects.equals(KitPvP.getMultipleChoiceSetting("restockonkill"), "foodblocks")
-                && !Objects.equals(KitPvP.getMultipleChoiceSetting("restockonkill"), "everything")
-                && !Objects.equals(KitPvP.getMultipleChoiceSetting("restockonkill"), "off")))
-            KitPvP.setMultipleChoiceSetting("restockonkill", "foodblocks");
-        if (KitPvP.getMultipleChoiceSetting("breakableblocks") == null
-                || (!Objects.equals(KitPvP.getMultipleChoiceSetting("breakableblocks"), "kitblocks")
-                && !Objects.equals(KitPvP.getMultipleChoiceSetting("breakableblocks"), "all")
-                && !Objects.equals(KitPvP.getMultipleChoiceSetting("breakableblocks"), "none")))
-            KitPvP.setMultipleChoiceSetting("breakableblocks", "kitblocks");
-        if (KitPvP.getMultipleChoiceSetting("neutralplayers") == null
-                || (!Objects.equals(KitPvP.getMultipleChoiceSetting("neutralplayers"), "survival")
-                && !Objects.equals(KitPvP.getMultipleChoiceSetting("neutralplayers"), "disabledamage")
-                && !Objects.equals(KitPvP.getMultipleChoiceSetting("neutralplayers"), "disabledamageandfly")))
-            KitPvP.setMultipleChoiceSetting("neutralplayers", "neutralplayers");
-        if (KitPvP.getMultipleChoiceSetting("mapreset") == null
-                || (!Objects.equals(KitPvP.getMultipleChoiceSetting("mapreset"), "5min")
-                && !Objects.equals(KitPvP.getMultipleChoiceSetting("mapreset"), "15min")
-                && !Objects.equals(KitPvP.getMultipleChoiceSetting("mapreset"), "30min")
-                && !Objects.equals(KitPvP.getMultipleChoiceSetting("mapreset"), "60min")
-                && !Objects.equals(KitPvP.getMultipleChoiceSetting("mapreset"), "never")))
-            KitPvP.setMultipleChoiceSetting("mapreset", "neutralplayers");
-        if (KitPvP.getMultipleChoiceSetting("templatemap") == null)
-            KitPvP.setMultipleChoiceSetting("templatemap", "none");
-        if (KitPvP.getMultipleChoiceSetting("kitpvpmap") == null)
-            KitPvP.setMultipleChoiceSetting("kitpvpmap", "world");
-        if (!getConfig().contains("settings.enableshields")) KitPvP.setSetting("enableshields", true);
+        KitPvpSettings.initSettings();
     }
 
     @Override
     public void onDisable() {
-        List<UUID> players = new ArrayList<>(kitPvpPlayers);
+        List<UUID> players = new ArrayList<>(kitPvpPlayers); //das macht sozusagen eine kopie der liste, das kennst du glaub ich noch nicht
         for (UUID uuid : players) {
             Player player = Bukkit.getPlayer(uuid);
             if (player == null) continue;
             KitPvP.disableKitPvp(player);
         }
-        for (Map.Entry<UUID, List<LivingEntity>> entry : defenders.entrySet()) {
-            for (LivingEntity entity : entry.getValue())
-                entity.remove();
-        }
+        for (Map.Entry<UUID, List<LivingEntity>> entry : playerDefenders.entrySet()) {
+            entry.getValue().forEach(LivingEntity::remove);//Hier gibt es 2 möglichkeiten, das ist cleaner aber damit du es besser verstehst hab ich dir nochmal das ausführliche ohne lambdas geschrieben
+            for (LivingEntity entity : entry.getValue())//HIER
+                entity.remove();                        //HIER
+        }                                               //HIER
     }
 
     public static Main getPlugin() {

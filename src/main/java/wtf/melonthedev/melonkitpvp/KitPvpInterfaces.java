@@ -156,13 +156,13 @@ public class KitPvpInterfaces {
         for (int i = 0; i < inv.getSize(); i++)
             inv.setItem(i, Utils.createItem(Material.CYAN_STAINED_GLASS_PANE, " ", null, 1));
         inv.setItem(10, Utils.createItem(Material.IRON_SWORD, ChatColor.WHITE + "PvP System: " + (KitPvP.getSetting("useoldpvp") ? "1.8" : "1.9+"), ChatColor.GRAY + "Click to toggle between 1.8/1.9+", 1));
-        inv.setItem(11, Utils.createItem(Material.GOLDEN_APPLE, ChatColor.WHITE + "Default Kill Bonus: " + (Objects.equals(KitPvP.getMultipleChoiceSetting("defaultkillbonus"), "gappleeffect") ? "Golden Apple Effect" : (Objects.equals(KitPvP.getMultipleChoiceSetting("defaultkillbonus"), "gapple") ? "Golden Apple" : "Full HP")), ChatColor.GRAY + "Click to toggle between Full HP/Golden Apple/Golden Apple Effects", 1));
-        inv.setItem(12, Utils.createItem(Material.BARREL, ChatColor.WHITE + "Restock Kit On Kill: " + (Objects.equals(KitPvP.getMultipleChoiceSetting("restockonkill"), "foodblocks") ? "Only Food & Blocks" : (Objects.equals(KitPvP.getMultipleChoiceSetting("restockonkill"), "everything") ? "Everything" : "Off")), ChatColor.GRAY + "Click to toggle between Everything/Only Food & Blocks/Off", 1));
-        inv.setItem(13, Utils.createItem(Material.IRON_PICKAXE, ChatColor.WHITE + "Breakable Blocks: " + (Objects.equals(KitPvP.getMultipleChoiceSetting("breakableblocks"), "kitblocks") ? "Blocks contained in kits" : (Objects.equals(KitPvP.getMultipleChoiceSetting("breakableblocks"), "all") ? "All" : "None")), ChatColor.GRAY + "Click to toggle between All/Blocks contained in kits/None", 1));
+        inv.setItem(11, Utils.createItem(Material.GOLDEN_APPLE, ChatColor.WHITE + "Default Kill Bonus: " + (Objects.equals(KitPvP.getMultipleChoiceSetting("defaultkillbonus"), "1") ? "Full HP" : (Objects.equals(KitPvP.getMultipleChoiceSetting("defaultkillbonus"), "2") ? "Golden Apple" : "Golden Apple Effects")), ChatColor.GRAY + "Click to toggle between Full HP/Golden Apple/Golden Apple Effects", 1));
+        inv.setItem(12, Utils.createItem(Material.BARREL, ChatColor.WHITE + "Restock Kit On Kill: " + (Objects.equals(KitPvP.getMultipleChoiceSetting("restockonkill"), "1") ? "Only Food & Blocks" : (Objects.equals(KitPvP.getMultipleChoiceSetting("restockonkill"), "2") ? "Everything" : "Off")), ChatColor.GRAY + "Click to toggle between Everything/Only Food & Blocks/Off", 1));
+        inv.setItem(13, Utils.createItem(Material.IRON_PICKAXE, ChatColor.WHITE + "Breakable Blocks: " + (Objects.equals(KitPvP.getMultipleChoiceSetting("breakableblocks"), "1") ? "Blocks contained in kits" : (Objects.equals(KitPvP.getMultipleChoiceSetting("breakableblocks"), "2") ? "All" : "None")), ChatColor.GRAY + "Click to toggle between All/Blocks contained in kits/None", 1));
         inv.setItem(14, Utils.createItem(Material.SHIELD, ChatColor.WHITE + "Shields: " + (KitPvP.getSetting("enableshields") ? "On" : "Off"), ChatColor.GRAY + "Toggles if any kit could contain a shield", 1));
-        inv.setItem(15, Utils.createItem(Material.SPYGLASS, ChatColor.WHITE + "Not-In-PvP-Players: " + (Objects.equals(KitPvP.getMultipleChoiceSetting("neutralplayers"), "survival") ? "Survival" : (Objects.equals(KitPvP.getMultipleChoiceSetting("neutralplayers"), "disabledamageandfly") ? "Disable Damage & Enable Flying" : "Disable Damage")), ChatColor.GRAY + "Click to toggle between Survival/Disable Damage/Disable Damage & Enable Flying", 1));
+        inv.setItem(15, Utils.createItem(Material.SPYGLASS, ChatColor.WHITE + "Not-In-PvP-Players: " + (Objects.equals(KitPvP.getMultipleChoiceSetting("neutralplayers"), "1") ? "Survival" : (Objects.equals(KitPvP.getMultipleChoiceSetting("neutralplayers"), "2") ? "Disable Damage" : "Disable Damage & Enable Flying")), ChatColor.GRAY + "Click to toggle between Survival/Disable Damage/Disable Damage & Enable Flying", 1));
         //inv.setItem(16, Utils.createItem(Material.TNT, ChatColor.WHITE + "Creepers and TNT explodes: " + (KitPvP.getSetting("explodingentities") ? "On" : "Off"), ChatColor.GRAY + "Toggles if Creepers and TNT can destroy the map", 1));
-        inv.setItem(16, Utils.createItem(Material.FILLED_MAP, ChatColor.WHITE + "Map Reset: " + (Objects.equals(KitPvP.getMultipleChoiceSetting("mapreset"), "5min") ? "Every 5 Minutes" : (Objects.equals(KitPvP.getMultipleChoiceSetting("mapreset"), "15min") ? "Every 15 Minutes" : (Objects.equals(KitPvP.getMultipleChoiceSetting("mapreset"), "30min") ? "Every 30 Minutes" : (Objects.equals(KitPvP.getMultipleChoiceSetting("mapreset"), "60min") ? "Every Hour" : "Never")))), ChatColor.GRAY + "Click to toggle between Every 5/15/30 Minutes/Every Hour/Never\nYou can set the template map in the config file.", 1));
+        inv.setItem(16, Utils.createItem(Material.FILLED_MAP, ChatColor.WHITE + "Map Reset: " + (Objects.equals(KitPvP.getMultipleChoiceSetting("mapreset"), "1") ? "Every 5 Minutes" : (Objects.equals(KitPvP.getMultipleChoiceSetting("mapreset"), "2") ? "Every 15 Minutes" : (Objects.equals(KitPvP.getMultipleChoiceSetting("mapreset"), "3") ? "Every 30 Minutes" : (Objects.equals(KitPvP.getMultipleChoiceSetting("mapreset"), "4") ? "Every Hour" : "Never")))), ChatColor.GRAY + "Click to toggle between Every 5/15/30 Minutes/Every Hour/Never\nYou can set the template map in the config file.", 1));
         inv.setItem(22, Utils.createItem(Material.ARROW, ChatColor.WHITE + "Go Back", ChatColor.GRAY + "To Home", 1));
         inv.setItem(23, Utils.createItem(Material.BARREL, ChatColor.WHITE + "Restock All Kits", ChatColor.GRAY + "Restocks the current kit of all players", 1));
         player.openInventory(inv);
@@ -177,22 +177,22 @@ public class KitPvpInterfaces {
                 toggleNextSetting("useoldpvp", player);
                 break;
             case 11:
-                toggleNextMultipleChoiceSetting("defaultkillbonus", player);
+                toggleNextMultipleChoiceSetting("defaultkillbonus", player, 3);
                 break;
             case 12:
-                toggleNextMultipleChoiceSetting("restockonkill", player);
+                toggleNextMultipleChoiceSetting("restockonkill", player, 3);
                 break;
             case 13:
-                toggleNextMultipleChoiceSetting("breakableblocks", player);
+                toggleNextMultipleChoiceSetting("breakableblocks", player, 3);
                 break;
             case 14:
                 toggleNextSetting("enableshields", player);
                 break;
             case 15:
-                toggleNextMultipleChoiceSetting("neutralplayers", player);
+                toggleNextMultipleChoiceSetting("neutralplayers", player, 3);
                 break;
             case 16:
-                toggleNextSetting("explodingentities", player);
+                toggleNextMultipleChoiceSetting("mapreset", player, 5);
                 break;
             case 23:
                 KitPvP.restockAllKits();
@@ -214,8 +214,25 @@ public class KitPvpInterfaces {
         openSettingsInterface(executor);
         KitPvP.refreshSettings();
     }
-    public static void toggleNextMultipleChoiceSetting(String setting, Player executor) {
+    public static void toggleNextMultipleChoiceSetting(String setting, Player executor, int maxOptionValues) {
+        if (!executor.isOp()) {
+            executor.sendMessage(ChatColor.RED + "You are not allowed to change settings!");
+            executor.closeInventory();
+            return;
+        }
+        System.out.println("Toggling " + setting);
+        int currentValue = 0;
+        try {
+            currentValue = Integer.parseInt(KitPvP.getMultipleChoiceSetting(setting));
+        } catch (NumberFormatException ignored) {}
 
+        if (currentValue >= maxOptionValues) currentValue = 1;
+        else currentValue++;
+
+        KitPvP.setMultipleChoiceSetting(setting, String.valueOf(currentValue));
+        //Refresh
+        KitPvP.refreshSettings();
+        openSettingsInterface(executor);
     }
 
     public static void openHotbarEditor(Player player, Kit kit) {
