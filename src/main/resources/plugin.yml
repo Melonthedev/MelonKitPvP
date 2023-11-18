@@ -1,7 +1,7 @@
 name: MelonKitPvP
 version: '${project.version}'
 main: wtf.melonthedev.melonkitpvp.Main
-api-version: 1.19
+api-version: 1.20
 authors: [ Melonthedev ]
 description: A Simple KitPvP Plugin
 website: melonthedev.wtf

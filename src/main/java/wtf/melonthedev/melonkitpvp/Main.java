@@ -28,17 +28,14 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        List<UUID> players = new ArrayList<>(kitPvpPlayers); //das macht sozusagen eine kopie der liste, das kennst du glaub ich noch nicht
+        List<UUID> players = new ArrayList<>(kitPvpPlayers);
         for (UUID uuid : players) {
             Player player = Bukkit.getPlayer(uuid);
             if (player == null) continue;
             KitPvP.disableKitPvp(player);
         }
-        for (Map.Entry<UUID, List<LivingEntity>> entry : playerDefenders.entrySet()) {
-            entry.getValue().forEach(LivingEntity::remove);//Hier gibt es 2 möglichkeiten, das ist cleaner aber damit du es besser verstehst hab ich dir nochmal das ausführliche ohne lambdas geschrieben
-            for (LivingEntity entity : entry.getValue())//HIER
-                entity.remove();                        //HIER
-        }                                               //HIER
+        for (Map.Entry<UUID, List<LivingEntity>> entry : playerDefenders.entrySet())
+            entry.getValue().forEach(LivingEntity::remove);
     }
 
     public static Main getPlugin() {

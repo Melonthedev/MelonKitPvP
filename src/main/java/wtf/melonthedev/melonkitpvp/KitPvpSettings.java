@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class KitPvpSettings {
 
-    private KitPvpSettings() {} //Utility class - das braucht man nicht zu instanziieren weil die methoden static sind und kein objekt sein sollten
+    private KitPvpSettings() {} //Utility class
 
     public static void initSettings() {
         initSetting("defaultkillbonus", 3, 3);
@@ -22,10 +22,10 @@ public class KitPvpSettings {
 
     public static void initSetting(String setting, int maxOptionValue, int defaultValue) {
         if (KitPvP.getMultipleChoiceSetting(setting) == null || (!isOptionValueValid(setting, maxOptionValue)))
-            KitPvP.setMultipleChoiceSetting(setting, String.valueOf(defaultValue)); //Gutes Beispiel fürs Integer zu String converten mit String.valueOf()
+            KitPvP.setMultipleChoiceSetting(setting, String.valueOf(defaultValue));
     }
 
-    public static boolean isOptionValueValid(String value, int maxOptionValues) { // IK das kann man besser machen
+    public static boolean isOptionValueValid(String value, int maxOptionValues) {
         for (int i = 1; i <= maxOptionValues; i++)
             if (Objects.equals(value, String.valueOf(i))) return true;
         return false;
